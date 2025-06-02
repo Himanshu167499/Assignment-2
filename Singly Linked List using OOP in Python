@@ -1,0 +1,83 @@
+# Node class - one block of the linked list
+class Block:   
+    def __init__(self, number):
+        self.number = number  # store data
+        self.next_block = None  # points to next block
+
+# Linked list class - connects all blocks
+class SimpleList:
+    def __init__(self):
+        self.start = None  # beginning of the list
+
+    # Add a new block to the end
+    def add_block(self, number):
+        new_block = Block(number)
+        if self.start is None:
+            self.start = new_block
+        else:
+            current = self.start
+            while current.next_block is not None:
+                current = current.next_block
+            current.next_block = new_block
+
+    # Show all blocks in the list
+    def show_list(self):
+        if self.start is None:
+            print("List is empty.")
+            return
+        current = self.start
+        while current is not None:
+            print(current.number, end=" -> ")
+            current = current.next_block
+        print("None")
+
+    # Remove a block at a specific position (1-based index)
+    def remove_block(self, place):
+        try:
+            if self.start is None:
+                raise Exception("List is empty.")
+            if place <= 0:
+                raise Exception("Place must be 1 or more.")
+
+            if place == 1:
+                self.start = self.start.next_block
+                return
+
+            current = self.start
+            for _ in range(place - 2):
+                if current.next_block is None:
+                    raise Exception("Place is too far.")
+                current = current.next_block
+
+            if current.next_block is None:
+                raise Exception("Place is too far.")
+
+            current.next_block = current.next_block.next_block
+
+        except Exception as e:
+            print("Error:", e)
+
+# ----------- Try it out -----------
+
+if __name__ == "__main__":
+    my_list = SimpleList()
+
+    # Add some numbers
+    my_list.add_block(100)
+    my_list.add_block(200)
+    my_list.add_block(300)
+    my_list.add_block(400)
+
+    print("Start List:")
+    my_list.show_list()
+
+    print("\nRemove block at place 2")
+    my_list.remove_block(2)
+    my_list.show_list()
+
+    print("\nTry removing block at place 10")
+    my_list.remove_block(10)
+
+    print("\nRemove block at place 1")
+    my_list.remove_block(1)
+    my_list.show_list()
